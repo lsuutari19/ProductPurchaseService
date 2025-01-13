@@ -20,7 +20,7 @@ public class Main {
         purchaseService.addNewProduct(002, 2.00, "SODA");
 
         System.out.println("\nPurchasing products for testing purposes...");
-        IProduct movieTicket = purchaseService.getAvailableProducts().get(1); // Use the correct product ID
+        IProduct movieTicket = purchaseService.getAvailableProducts().get(1);
         IProduct soda = purchaseService.getAvailableProducts().get(2);
         purchaseService.purchaseProduct(movieTicket);
         purchaseService.purchaseProduct(soda);

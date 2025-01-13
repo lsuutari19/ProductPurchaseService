@@ -8,9 +8,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SalesReport implements ISalesReport {
-    private Date fromDate;
-    private Date toDate;
-    private List<IProduct> soldProducts;
+    private final Date fromDate;
+    private final Date toDate;
+    private final List<IProduct> soldProducts;
 
     public SalesReport(Date fromDate, Date toDate, List<IProduct> soldProducts) {
         this.fromDate = fromDate;

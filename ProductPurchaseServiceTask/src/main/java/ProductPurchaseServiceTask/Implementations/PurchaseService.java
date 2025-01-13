@@ -7,8 +7,8 @@ import ProductPurchaseServiceTask.Interfaces.ISalesReport;
 import java.util.*;
 
 public class PurchaseService implements IPurchaseService {
-    private Map<Integer, IProduct> products = new HashMap<>();
-    private List<IProduct> purchasedProducts = new ArrayList<>();
+    private final Map<Integer, IProduct> products = new HashMap<>();
+    private final List<IProduct> purchasedProducts = new ArrayList<>();
 
     @Override
     public void addNewProduct(int productId, double price, String name) {

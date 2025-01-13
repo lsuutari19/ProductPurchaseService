@@ -9,6 +9,7 @@ import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
@@ -16,12 +17,10 @@ import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
 import java.util.Date;
 import java.util.List;
 
-public class AppTest 
-{
-    
+public class AppTest {
+
     @Test
-    public void serviceIsNull()
-    {
+    public void serviceIsNull() {
         IPurchaseService service = null;
         Assert.assertNull(service);
     }
