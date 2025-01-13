@@ -1,8 +1,9 @@
 # Compiled class file
 *.class
 
-# IntelliJ idea
+# IntelliJ idea & VSCode
 .idea/
+.vscode/
 
 # Log file
 *.log
