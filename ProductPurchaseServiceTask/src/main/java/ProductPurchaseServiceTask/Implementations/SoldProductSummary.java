@@ -5,11 +5,11 @@ import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 import java.util.Date;
 
 public class SoldProductSummary implements ISoldProductSummary {
-    private String productName;
-    private int quantity;
-    private double totalPrice;
-    private int productId;
-    private Date purchaseDate;
+    private final String productName;
+    private final int quantity;
+    private final double totalPrice;
+    private final int productId;
+    private final Date purchaseDate;
 
     public SoldProductSummary(String productName, int quantity, double totalPrice, int productId, Date purchaseDate) {
 

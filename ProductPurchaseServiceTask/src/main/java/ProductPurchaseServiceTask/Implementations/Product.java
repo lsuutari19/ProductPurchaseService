@@ -5,9 +5,9 @@ import ProductPurchaseServiceTask.Interfaces.IProduct;
 import java.util.Date;
 
 public class Product implements IProduct {
-    private int productId;
-    private double price;
-    private String name;
+    private final int productId;
+    private final double price;
+    private final String name;
     private Date purchaseDate;
 
     public Product(int productId, double price, String name) {
