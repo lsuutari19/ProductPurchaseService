@@ -197,16 +197,16 @@ public class AppTest {
         SoldProductSummary summary = new SoldProductSummary(productName, quantity, totalPrice, productId, product.getPurchaseDate());
 
         assertEquals("Product name should be correct", productName, summary.getProductName());
-        assertEquals("Total price should be 0.00 for zero quantity", totalPrice, summary.getTotalPrice(), 0.001); // Use delta for floating-point comparison
-        assertEquals("Product ID should be correct", String.valueOf(productId), String.valueOf(summary.getProductId())); // Compare as strings
-        assertEquals("Sold amount should be 0 for no sales", String.valueOf(quantity), String.valueOf(summary.getSoldAmount())); // Compare as strings
+        assertEquals("Total price should be 0.00 for zero quantity", totalPrice, summary.getTotalPrice(), 0.001);
+        assertEquals("Product ID should be correct", String.valueOf(productId), String.valueOf(summary.getProductId()));
+        assertEquals("Sold amount should be 0 for no sales", String.valueOf(quantity), String.valueOf(summary.getSoldAmount()));
     }
 
     @Test
     public void testSoldProducts_NegativePrice() {
         String productName = "SODA";
         int quantity = 3;
-        double totalPrice = -6.00;  // Invalid negative price
+        double totalPrice = -6.00;
         int productId = 002;
 
         Product product = new Product(productId, 5.00, productName);
