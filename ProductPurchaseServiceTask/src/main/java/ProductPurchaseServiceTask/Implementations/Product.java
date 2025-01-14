@@ -51,7 +51,6 @@ public class Product implements IProduct {
         return purchaseDate;
     }
 
-
     // Get a string representation of the product details for debug purposes instead of the memory reference
     @Override
     public String toString() {

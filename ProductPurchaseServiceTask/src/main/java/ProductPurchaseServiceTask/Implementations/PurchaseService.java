@@ -30,6 +30,14 @@ public class PurchaseService implements IPurchaseService {
         return purchasedProducts;
     }
 
+    public IProduct fetchProductById(int productId) {
+        IProduct product = products.get(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("ERROR ⚠: Product with ID " + productId + " not found in available products.");
+        }
+        return product;
+    }
+
     @Override
     public void removeProduct(int productId) {
         IProduct removedProduct = products.remove(productId);

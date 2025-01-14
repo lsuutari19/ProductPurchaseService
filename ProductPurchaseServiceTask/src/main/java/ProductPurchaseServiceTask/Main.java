@@ -63,6 +63,7 @@ public class Main {
             System.out.println("  2. Purchase product");
             System.out.println("  3. List all available products");
             System.out.println("  4. Remove product");
+            System.out.println("  5. View purchase history");
             System.out.println("  q. Exit");
             choice = sc.nextLine();
             System.out.println(choice);
@@ -74,18 +75,27 @@ public class Main {
 
                     System.out.println("\nEnter product price: ");
                     int productPrice = sc.nextInt();
+                    sc.nextLine();
 
                     System.out.println("\nEnter product ID: ");
                     int productId = sc.nextInt();
+                    sc.nextLine();
                     purchaseService.addNewProduct(productId, productPrice, productName);
                 } catch (Exception e) {
                     System.out.println("ERROR ⚠: " + e);
                 }
-
-
             }
             if(Objects.equals(choice, "2")) {
-                continue;
+                System.out.println("\nAll available products are: " + purchaseService.getAvailableProducts() + "\nInput productID that you want to purchase: ");
+                int productId = sc.nextInt();
+                sc.nextLine();
+                try {
+                    IProduct product = ((PurchaseService) purchaseService).fetchProductById(productId);
+                    purchaseService.purchaseProduct(product);
+                } catch (Exception e) {
+                    System.out.println("ERROR ⚠: " + e);
+                }
+
             }
             if(Objects.equals(choice, "3")) {
                 System.out.println("\nAll available products are: " + purchaseService.getAvailableProducts());
@@ -94,8 +104,17 @@ public class Main {
                 try {
                     System.out.println("Enter product ID that is to be removed, available products are: " + purchaseService.getAvailableProducts());
                     int productId = sc.nextInt();
+                    sc.nextLine();
                     purchaseService.removeProduct(productId);
-                } catch(Exception e) {
+                } catch (Exception e) {
+                    System.out.println("ERROR ⚠: " + e);
+                }
+            }
+            if(Objects.equals(choice, "5")) {
+                // Not implemented yet
+                try {
+                    System.out.println("Not impelented yet :(");
+                } catch (Exception e) {
                     System.out.println("ERROR ⚠: " + e);
                 }
             }
