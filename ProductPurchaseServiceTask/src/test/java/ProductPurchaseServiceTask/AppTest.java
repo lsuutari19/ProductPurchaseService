@@ -38,7 +38,7 @@ public class AppTest {
     public void testAddNewProduct_InvalidPrice() {
         Exception exception = null;
         try {
-            purchaseService.addNewProduct(3, -5.00, "Invalid product price");
+            purchaseService.addNewProduct("3", -5.00, "Invalid product price");
         } catch (IllegalArgumentException e) {
             exception = e;
         }
@@ -50,7 +50,7 @@ public class AppTest {
     public void testAddNewProduct_EmptyName() {
         Exception exception = null;
         try {
-            purchaseService.addNewProduct(2, 5.00, "");
+            purchaseService.addNewProduct("2", 5.00, "");
         } catch (IllegalArgumentException e) {
             exception = e;
         }
@@ -62,7 +62,7 @@ public class AppTest {
     public void testAddNewProduct_SpecialCharactersInName() {
         Exception exception = null;
         try {
-            purchaseService.addNewProduct(7, 10.00, "In@valid#Name!@@@");
+            purchaseService.addNewProduct("7", 10.00, "In@valid#Name!@@@");
         } catch (IllegalArgumentException e) {
             exception = e;
         }
@@ -73,9 +73,9 @@ public class AppTest {
     @Test
     public void testAddNewProduct_DuplicateId() {
         Exception exception = null;
-        purchaseService.addNewProduct(5, 5.00, "SODA");
+        purchaseService.addNewProduct("5", 5.00, "SODA");
         try {
-            purchaseService.addNewProduct(5, 8.00, "TICKET");
+            purchaseService.addNewProduct("5", 8.00, "TICKET");
         } catch (IllegalArgumentException e) {
             exception = e;
         }
@@ -87,14 +87,15 @@ public class AppTest {
     public void testAddNewProduct_NegativePrice() {
         Exception exception = null;
         try {
-            purchaseService.addNewProduct(6, -10.00, "Invalid Price Product");
+            purchaseService.addNewProduct("6", -10.00, "Invalid Price Product");
         } catch (IllegalArgumentException e) {
             exception = e;
         }
         assertNotNull("Exception should be thrown for negative price", exception);
         assertEquals("ERROR ⚠: Price can't be set to negative number!", exception.getMessage());
-        assertFalse("Product with negative price shouldn't be added to available products",
-                purchaseService.getAvailableProducts().containsKey(6));
+        boolean productExists = purchaseService.getAvailableProducts().stream()
+                .anyMatch(product -> product.getProductId() == "6");
+        assertFalse("Product with negative price shouldn't be added to available products", productExists);
     }
 
     @Test
@@ -102,46 +103,41 @@ public class AppTest {
         Exception exception = null;
         try {
             double price = Double.parseDouble("asd");
-            purchaseService.addNewProduct(7, price, "Invalid String Price");
+            purchaseService.addNewProduct("7", price, "Invalid String Price");
         } catch (NumberFormatException e) {
             exception = e;
         }
         assertNotNull("Exception should be thrown for string price", exception);
         assertEquals("For input string: \"asd\"", exception.getMessage());
-        assertFalse("Product with string price shouldn't be added to available products",
-                purchaseService.getAvailableProducts().containsKey(7));
-    }
-
-    @Test
-    public void testAddNewProduct_StringProductId() {
-        Exception exception = null;
-        try {
-            int productId = Integer.parseInt("asd");
-            purchaseService.addNewProduct(productId, 20.00, "Invalid String Product ID");
-        } catch (NumberFormatException e) {
-            exception = e;
-        }
-        assertNotNull("Exception should be thrown for string product ID", exception);
-        assertEquals("For input string: \"asd\"", exception.getMessage());
+        boolean productExists = purchaseService.getAvailableProducts().stream()
+                .anyMatch(product -> product.getProductId() == "7");
+        assertFalse("Product with negative price shouldn't be added to available products", productExists);
     }
 
     @Test
     public void testAddNewProduct_Valid() {
-        purchaseService.addNewProduct(8, 15.00, "Valid Product");
-        assertTrue("Product should be added to available products",
-                purchaseService.getAvailableProducts().containsKey(8));
-        assertEquals("Product price should match",
-                15.00, purchaseService.getAvailableProducts().get(8).getPrice(), 0.01);
-        assertEquals("Product name should match",
-                "Valid Product", purchaseService.getAvailableProducts().get(8).getName());
+        purchaseService.addNewProduct("8", 15.00, "Valid Product");
+
+        boolean productExists = purchaseService.getAvailableProducts().stream()
+                .anyMatch(product -> product.getProductId().equals("8"));
+        assertTrue("Product should be added to available products", productExists);
+
+        IProduct product = purchaseService.getAvailableProducts().stream()
+                .filter(p -> p.getProductId().equals("8"))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull("Product should be present in the available products list", product);
+        assertEquals("Product price should match", 15.00, product.getPrice(), 0.01);
+        assertEquals("Product name should match", "Valid Product", product.getName());
     }
 
 
     // Tests for purchasing products
     @Test
     public void testPurchaseProduct_Valid() {
-        IProduct product = new Product(4, 30.00, "Headphones");
-        purchaseService.addNewProduct(4, 30.00, "Headphones");
+        IProduct product = new Product("4", 30.00, "Headphones");
+        purchaseService.addNewProduct("4", 30.00, "Headphones");
         purchaseService.purchaseProduct(product);
         assertTrue("Purchased products should contain the headphones.",
                 purchaseService.getPurchasedProducts().contains(product));
@@ -151,14 +147,16 @@ public class AppTest {
     public void testPurchaseProduct_NegativePrice() {
         Exception exception = null;
         try {
-            IProduct product = new Product(4, -3.00, "Invalid product price");
+            IProduct product = new Product("4", -3.00, "Invalid product price");
             purchaseService.purchaseProduct(product);
         } catch (IllegalArgumentException e) {
             exception = e;
         }
         assertNotNull("Exception should be thrown for negative price", exception);
         assertEquals("ERROR ⚠: Price can't be set to negative number!", exception.getMessage());
-        assertFalse("Product with negative price shouldn't be allowed to be purchased", purchaseService.getAvailableProducts().containsKey(4));
+        boolean productExists = purchaseService.getAvailableProducts().stream()
+                .anyMatch(product -> product.getProductId() == "4");
+        assertFalse("Product with negative price shouldn't be added to available products", productExists);
     }
 
     @Test
@@ -166,7 +164,7 @@ public class AppTest {
         Exception exception = null;
         try {
             double price = Double.parseDouble("asd");
-            IProduct product = new Product(4, price, "Invalid product price");
+            IProduct product = new Product("4", price, "Invalid product price");
             purchaseService.purchaseProduct(product);
         } catch (NumberFormatException e) {
             exception = e;
@@ -176,22 +174,8 @@ public class AppTest {
     }
 
     @Test
-    public void testPurchaseProduct_StringPID() {
-        Exception exception = null;
-        try {
-            int price = Integer.parseInt("asd");
-            IProduct product = new Product(price, 1, "Invalid product ID");
-            purchaseService.purchaseProduct(product);
-        } catch (NumberFormatException e) {
-            exception = e;
-        }
-        assertNotNull("Exception should be thrown for string ID", exception);
-        assertEquals("For input string: \"asd\"", exception.getMessage());
-    }
-
-    @Test
     public void testPurchaseProduct_NotExist() {
-        IProduct nonExistentProduct = new Product(999, 10.00, "Non-Existent Product");
+        IProduct nonExistentProduct = new Product("999", 10.00, "Non-Existent Product");
         Exception exception = null;
         try {
             purchaseService.purchaseProduct(nonExistentProduct);
@@ -216,10 +200,10 @@ public class AppTest {
 
     @Test
     public void testSalesReport_Purchases() {
-        purchaseService.addNewProduct(1, 5.00, "MOVIE TICKET");
-        purchaseService.addNewProduct(2, 2.00, "SODA");
-        purchaseService.purchaseProduct(new Product(1, 5.00, "MOVIE TICKET"));
-        purchaseService.purchaseProduct(new Product(2, 2.00, "SODA"));
+        purchaseService.addNewProduct("1", 5.00, "MOVIE TICKET");
+        purchaseService.addNewProduct("2", 2.00, "SODA");
+        purchaseService.purchaseProduct(new Product("1", 5.00, "MOVIE TICKET"));
+        purchaseService.purchaseProduct(new Product("2", 2.00, "SODA"));
         Date fromDate = new Date(0);
         Date toDate = new Date(System.currentTimeMillis());
         ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
@@ -235,8 +219,8 @@ public class AppTest {
         Date fromDate = new Date(0);
         Date toDate = new Date(oneDayAgo);
 
-        purchaseService.addNewProduct(1, 5.00, "MOVIE TICKET");
-        purchaseService.purchaseProduct(new Product(1, 5.00, "MOVIE TICKET"));
+        purchaseService.addNewProduct("1", 5.00, "MOVIE TICKET");
+        purchaseService.purchaseProduct(new Product("1", 5.00, "MOVIE TICKET"));
 
         ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
         assertTrue("Sales report should have no products if none have been purchased.", salesReport.getSoldProducts().isEmpty());
@@ -249,7 +233,7 @@ public class AppTest {
         String productName = "MOVIE TICKET";
         int quantity = 2;
         double totalPrice = 10.00;
-        int productId = 1;
+        String productId = "1";
 
         Product product = new Product(productId, 5.00, productName);
         Date purchaseDate = new Date();
@@ -268,7 +252,7 @@ public class AppTest {
         String productName = "SODA";
         int quantity = 0;
         double totalPrice = 0.00;
-        int productId = 3;
+        String productId = "3";
 
         Product product = new Product(productId, 5.00, productName);
         Date purchaseDate = new Date();
@@ -287,7 +271,7 @@ public class AppTest {
         String productName = "SODA";
         int quantity = 3;
         double totalPrice = -6.00;
-        int productId = 2;
+        String productId = "2";
 
         Product product = new Product(productId, 5.00, productName);
         Date purchaseDate = new Date();

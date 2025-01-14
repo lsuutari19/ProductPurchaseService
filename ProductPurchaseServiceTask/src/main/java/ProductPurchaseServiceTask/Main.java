@@ -16,11 +16,11 @@ public class Main {
         IPurchaseService purchaseService = new PurchaseService();
 
         System.out.println("\nCreating placeholder products...");
-        purchaseService.addNewProduct(1, 5.00, "MOVIE TICKET");
-        purchaseService.addNewProduct(2, 2.00, "SODA");
-        purchaseService.addNewProduct(3, 6.00, "MOVIE TICKET and SODA");
-        purchaseService.addNewProduct(4, 3.00, "POPCORN");
-        purchaseService.addNewProduct(5, 10.00, "DELUXE COMBO");
+        purchaseService.addNewProduct("1", 5.00, "MOVIE TICKET");
+        purchaseService.addNewProduct("2", 2.00, "SODA");
+        purchaseService.addNewProduct("3", 6.00, "MOVIE TICKET and SODA");
+        purchaseService.addNewProduct("4", 3.00, "POPCORN");
+        purchaseService.addNewProduct("5", 10.00, "DELUXE COMBO");
 
         System.out.println("\nPurchasing products for testing purposes...");
         IProduct movieTicket = purchaseService.getAvailableProducts().get(1);
@@ -52,10 +52,10 @@ public class Main {
         ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
 
         //Utils.displaySoldProducts(salesReport, fromDate, toDate);
-        Utils.displaySalesReport(salesReport, fromDate, toDate);
+        Utils.displaySalesReport(salesReport);
 
         System.out.println("\nRemoving product with productId 5...");
-        purchaseService.removeProduct(5);
+        purchaseService.removeProduct(((PurchaseService) purchaseService).fetchProductById("5"));
         Utils.displayAvailableProducts(purchaseService.getAvailableProducts());
 
         // Start the demo CLI app

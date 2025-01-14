@@ -6,7 +6,7 @@ public interface IProduct {
 
     double getPrice();
 
-    int getProductId();
+    String getProductId();
 
     String getName();
 

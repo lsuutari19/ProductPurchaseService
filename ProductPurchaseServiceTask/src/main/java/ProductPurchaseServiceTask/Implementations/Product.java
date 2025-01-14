@@ -5,20 +5,20 @@ import ProductPurchaseServiceTask.Interfaces.IProduct;
 import java.util.Date;
 
 public class Product implements IProduct {
-    private final int productId;
+    private final String productId;
     private final double price;
     private final String name;
     private Date purchaseDate;
 
-    public Product(int productId, double price, String name) {
+    public Product(String productId, double price, String name) {
         if (price < 0) {
             throw new IllegalArgumentException("ERROR ⚠: Price can't be set to negative number!");
         }
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("ERROR ⚠: Name can't be null!");
         }
-        if (productId < 0) {
-            throw new IllegalArgumentException("ERROR ⚠: ProductId can't be set to negative number!");
+        if (productId == null) {
+            throw new IllegalArgumentException("ERROR ⚠: ProductId can't be set to null!");
         }
         if (!name.matches("^[a-zA-Z0-9 -]+$")) {
             throw new IllegalArgumentException("ERROR ⚠: Name contains invalid characters!");
@@ -37,7 +37,7 @@ public class Product implements IProduct {
     }
 
     @Override
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
@@ -55,10 +55,9 @@ public class Product implements IProduct {
     }
 
     // Get a string representation of the product details for human readability instead of the memory reference
-    @Override
     public String toString() {
         return String.format(
-                "Product ID: %-5d | Price: %-10.2f | Name: %s",
+                "Product ID: %-5s | Price: %-10.2f | Name: %s",
                 productId, price, name
         );
     }

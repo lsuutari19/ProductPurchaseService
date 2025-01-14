@@ -51,16 +51,16 @@ public class SalesReport implements ISalesReport {
             return new ArrayList<>();
         }
 
-        Map<Integer, Long> productCounts = filteredProducts.stream()
+        Map<String, Long> productCounts = filteredProducts.stream()
                 .collect(Collectors.groupingBy(IProduct::getProductId, Collectors.counting()));
 
         List<ISoldProductSummary> summaryList = productCounts.entrySet().stream()
                 .map(entry -> {
-                    int productId = entry.getKey();
+                    String productId = entry.getKey();
                     long quantity = entry.getValue();
 
                     IProduct product = filteredProducts.stream()
-                            .filter(p -> p.getProductId() == productId)
+                            .filter(p -> p.getProductId().equals(productId))
                             .findFirst()
                             .orElseThrow(() -> new IllegalStateException("Product not found with ID: " + productId));
 
