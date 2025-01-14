@@ -51,14 +51,12 @@ public class Product implements IProduct {
         return purchaseDate;
     }
 
-
     // Get a string representation of the product details for debug purposes instead of the memory reference
     @Override
     public String toString() {
-        return "Product{" +
-                "productId=" + productId +
-                ", price=" + price +
-                ", name='" + name + '\'' +
-                '}';
+        return String.format(
+                "Product ID: %-5d | Price: €%-10.2f | Name: %s",
+                productId, price, name
+        );
     }
 }

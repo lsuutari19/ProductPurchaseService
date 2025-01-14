@@ -21,6 +21,9 @@ public class PurchaseService implements IPurchaseService {
         if (productId < 0) {
             throw new IllegalArgumentException("ERROR ⚠: ProductId can't be set to negative number!");
         }
+        if (products.containsKey(productId)) {
+            throw new IllegalArgumentException("ERROR ⚠: No duplicate productId's allowed!");
+        }
         System.out.println("New product added. Name: " + name + " productId: " + productId + " price " + price);
         IProduct product = new Product(productId, price, name);
         products.put(productId, product);
@@ -28,6 +31,14 @@ public class PurchaseService implements IPurchaseService {
 
     public List<IProduct> getPurchasedProducts() {
         return purchasedProducts;
+    }
+
+    public IProduct fetchProductById(int productId) {
+        IProduct product = products.get(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("ERROR ⚠: Product with ID " + productId + " not found in available products.");
+        }
+        return product;
     }
 
     @Override
