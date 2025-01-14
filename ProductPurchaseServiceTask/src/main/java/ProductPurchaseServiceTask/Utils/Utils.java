@@ -66,7 +66,7 @@ public class Utils {
                         sc.nextLine();
                         purchaseService.addNewProduct(productId, productPrice, productName);
                     } catch (Exception e) {
-                        System.out.println("ERROR ⚠: " + e);
+                        System.out.println(e.getMessage());
                     }
                     break;
 
@@ -79,7 +79,7 @@ public class Utils {
                         IProduct product = ((PurchaseService) purchaseService).fetchProductById(productId);
                         purchaseService.purchaseProduct(product);
                     } catch (Exception e) {
-                        System.out.println("ERROR ⚠: " + e);
+                        System.out.println(e.getMessage());
                     }
                     break;
 
@@ -95,7 +95,7 @@ public class Utils {
                         sc.nextLine();
                         purchaseService.removeProduct(productId);
                     } catch (Exception e) {
-                        System.out.println("ERROR ⚠: " + e);
+                        System.out.println(e.getMessage());
                     }
                     break;
 

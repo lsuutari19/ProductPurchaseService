@@ -68,6 +68,19 @@ public class AppTest {
         assertEquals("ERROR ⚠: Name can't be null!", exception.getMessage());
     }
 
+    @Test
+    public void testAddNewProduct_DuplicateId() {
+        Exception exception = null;
+        purchaseService.addNewProduct(005, 5.00, "SODA");
+        try {
+            purchaseService.addNewProduct(005, 8.00, "TICKET");
+        } catch (IllegalArgumentException e) {
+            exception = e;
+        }
+        assertNotNull("Exception should be thrown for duplicate id", exception);
+        assertEquals("ERROR ⚠: No duplicate productId's allowed!", exception.getMessage());
+    }
+
 
     // Tests for purchasing products
     @Test
@@ -207,5 +220,4 @@ public class AppTest {
             assertEquals("ERROR ⚠: Price and quantity must be non-negative.", e.getMessage());
         }
     }
-
 }
