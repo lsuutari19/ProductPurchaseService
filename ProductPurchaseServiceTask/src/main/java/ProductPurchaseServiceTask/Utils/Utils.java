@@ -6,6 +6,7 @@ import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
 import ProductPurchaseServiceTask.Interfaces.ISalesReport;
 import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Utils {
@@ -35,6 +36,14 @@ public class Utils {
         }
     }
 
+    public static void displaySalesReport(ISalesReport salesReport, Date fromDate, Date toDate) {
+        if (salesReport != null) {
+            System.out.println("Sales Report from: " + salesReport.getFromDate());
+            System.out.println("Sales Report to: " + salesReport.getToDate());
+            System.out.println("Total Sales: " + salesReport.getTotalSales());
+        }
+    }
+
     public static void cliDemo(IPurchaseService purchaseService) {
         Scanner sc = new Scanner(System.in);
         String choice = "";
@@ -44,7 +53,8 @@ public class Utils {
             System.out.println("  2. Purchase product");
             System.out.println("  3. List all available products");
             System.out.println("  4. Remove product");
-            System.out.println("  5. View purchase history");
+            System.out.println("  5. View overall purchase history");
+            System.out.println("  6. View specific sales history");
             System.out.println("  q. Exit");
 
             choice = sc.nextLine();
@@ -108,11 +118,29 @@ public class Utils {
 
                 case "5":
                     long currentTime = System.currentTimeMillis();
-                    long oneDayAgo = currentTime - 24 * 60 * 60 * 1000;
-                    Date fromDate = new Date(oneDayAgo);
+                    Date fromDate = new Date();
                     Date toDate = new Date(currentTime);
                     ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
                     Utils.displaySoldProducts(salesReport, fromDate, toDate);
+                    break;
+
+                case "6":
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+                        System.out.println("Enter the start date in dd-mm-yyyy format: ");
+                        String startDate = sc.nextLine();
+                        Date startDateParsed = dateFormat.parse(startDate);
+
+                        System.out.println("Enter the end date in dd-mm-yyyy format: ");
+                        String endDate = sc.nextLine();
+                        Date endDateParsed = dateFormat.parse(endDate);
+
+                        ISalesReport specificSalesReport = purchaseService.getSalesReport(startDateParsed, endDateParsed);
+                        Utils.displaySalesReport(specificSalesReport, startDateParsed, endDateParsed);
+
+                    } catch(Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
 
                 case "q":
