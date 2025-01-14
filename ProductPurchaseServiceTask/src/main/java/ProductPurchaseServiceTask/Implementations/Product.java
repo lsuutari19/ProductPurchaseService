@@ -20,6 +20,9 @@ public class Product implements IProduct {
         if (productId < 0) {
             throw new IllegalArgumentException("ERROR ⚠: ProductId can't be set to negative number!");
         }
+        if (!name.matches("^[a-zA-Z0-9 -]+$")) {
+            throw new IllegalArgumentException("ERROR ⚠: Name contains invalid characters!");
+        }
 
         this.productId = productId;
         this.price = price;
@@ -51,11 +54,11 @@ public class Product implements IProduct {
         return purchaseDate;
     }
 
-    // Get a string representation of the product details for debug purposes instead of the memory reference
+    // Get a string representation of the product details for human readability instead of the memory reference
     @Override
     public String toString() {
         return String.format(
-                "Product ID: %-5d | Price: €%-10.2f | Name: %s",
+                "Product ID: %-5d | Price: %-10.2f | Name: %s",
                 productId, price, name
         );
     }
