@@ -1,5 +1,7 @@
 # Bonwal Product Purchase service coding task
 
+## Improvements:
+Randomized productId that is automatically given to new products and should never be the same across new products (for management of sales during a long time period)
 
 ### Description
 
