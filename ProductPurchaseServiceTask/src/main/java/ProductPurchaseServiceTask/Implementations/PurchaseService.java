@@ -24,6 +24,10 @@ public class PurchaseService implements IPurchaseService {
         if (products.containsKey(productId)) {
             throw new IllegalArgumentException("ERROR ⚠: No duplicate productId's allowed!");
         }
+        if (!name.matches("^[a-zA-Z0-9 ]+$")) {
+            throw new IllegalArgumentException("ERROR ⚠: Name contains invalid characters!");
+        }
+
         System.out.println("New product added. Name: " + name + " productId: " + productId + " price " + price);
         IProduct product = new Product(productId, price, name);
         products.put(productId, product);

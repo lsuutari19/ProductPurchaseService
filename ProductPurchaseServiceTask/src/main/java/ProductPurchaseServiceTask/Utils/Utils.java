@@ -6,10 +6,7 @@ import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
 import ProductPurchaseServiceTask.Interfaces.ISalesReport;
 import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Utils {
 
@@ -34,7 +31,7 @@ public class Utils {
             System.out.println("Quantity Sold: " + summary.getSoldAmount());
             System.out.println("Total Sales: " + summary.getTotalPrice());
             System.out.println("Product ID: " + summary.getProductId());
-            System.out.println("Purchase Date: " + summary.getPurchaseDate());
+            System.out.println("Purchase Date: " + summary.getPurchaseDate() + "\n");
         }
     }
 
@@ -49,6 +46,7 @@ public class Utils {
             System.out.println("  4. Remove product");
             System.out.println("  5. View purchase history");
             System.out.println("  q. Exit");
+
             choice = sc.nextLine();
 
             switch (choice) {
@@ -65,19 +63,25 @@ public class Utils {
                         int productId = sc.nextInt();
                         sc.nextLine();
                         purchaseService.addNewProduct(productId, productPrice, productName);
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input. Please enter a valid number.");
+                        sc.nextLine();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
 
                 case "2":
-                    displayAvailableProducts(purchaseService.getAvailableProducts());
-                    System.out.println("\nInput productID that you want to purchase: ");
                     try {
+                        displayAvailableProducts(purchaseService.getAvailableProducts());
+                        System.out.println("\nInput productID that you want to purchase: ");
                         int productId = sc.nextInt();
                         sc.nextLine();
                         IProduct product = ((PurchaseService) purchaseService).fetchProductById(productId);
                         purchaseService.purchaseProduct(product);
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input. Please enter a valid product ID.");
+                        sc.nextLine();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -94,6 +98,9 @@ public class Utils {
                         int productId = sc.nextInt();
                         sc.nextLine();
                         purchaseService.removeProduct(productId);
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input. Please enter a valid product ID.");
+                        sc.nextLine();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
