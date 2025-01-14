@@ -58,7 +58,7 @@ public class PurchaseService implements IPurchaseService {
     public void purchaseProduct(IProduct product) {
         long currentTime = System.currentTimeMillis();
         Date toDate = new Date(currentTime);
-        
+
         boolean productExists = products.stream()
                 .anyMatch(p -> p.getProductId().equals(product.getProductId()));
 
@@ -68,7 +68,7 @@ public class PurchaseService implements IPurchaseService {
 
         if (product instanceof Product) {
             System.out.println("Setting purchase date for product: " + product.getName() + " Time: " + toDate);
-            product.setPurchaseDate(toDate);
+            ((Product) product).setPurchaseDate(toDate);
         }
 
         purchasedProducts.add(product);

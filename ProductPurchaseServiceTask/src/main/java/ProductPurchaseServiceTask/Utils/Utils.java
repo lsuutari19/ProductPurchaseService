@@ -1,6 +1,7 @@
 package ProductPurchaseServiceTask.Utils;
 
 import ProductPurchaseServiceTask.Implementations.PurchaseService;
+import ProductPurchaseServiceTask.Implementations.SalesReport;
 import ProductPurchaseServiceTask.Interfaces.IProduct;
 import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
 import ProductPurchaseServiceTask.Interfaces.ISalesReport;

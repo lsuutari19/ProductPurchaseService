@@ -38,10 +38,9 @@ public class Main {
 
         Utils.displayAvailableProducts(purchaseService.getAvailableProducts());
 
-        System.out.println("\nVerifying purchased products and their purchase dates...");
+        System.out.println("\nVerifying purchased products...");
         for (IProduct purchasedProduct : ((PurchaseService) purchaseService).getPurchasedProducts()) {
             System.out.println("Product Name: " + purchasedProduct.getName());
-            System.out.println("Purchase Date: " + purchasedProduct.getPurchaseDate());
         }
 
         long currentTime = System.currentTimeMillis();

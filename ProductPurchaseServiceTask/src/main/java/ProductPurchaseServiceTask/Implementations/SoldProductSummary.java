@@ -9,9 +9,8 @@ public class SoldProductSummary implements ISoldProductSummary {
     private final int quantity;
     private final double totalPrice;
     private final String productId;
-    private final Date purchaseDate;
 
-    public SoldProductSummary(String productName, int quantity, double totalPrice, String productId, Date purchaseDate) {
+    public SoldProductSummary(String productName, int quantity, double totalPrice, String productId) {
 
         if (totalPrice < 0 || quantity < 0) {
             throw new IllegalArgumentException("ERROR ⚠: Price and quantity must be non-negative.");
@@ -21,7 +20,7 @@ public class SoldProductSummary implements ISoldProductSummary {
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.productId = productId;
-        this.purchaseDate = purchaseDate;
+
     }
 
     public String getProductName() {
@@ -41,9 +40,5 @@ public class SoldProductSummary implements ISoldProductSummary {
     @Override
     public int getSoldAmount() {
         return quantity;
-    }
-
-    public Date getPurchaseDate() {
-        return purchaseDate;
     }
 }
