@@ -68,7 +68,7 @@ public class PurchaseService implements IPurchaseService {
             product.setPurchaseDate(toDate);
         }
         purchasedProducts.add(product);
-        System.out.println("Added product to purchasedProducts: " + product);
+        System.out.println("Added product to purchased products: " + product);
     }
 
     @Override
