@@ -24,27 +24,22 @@ public class SoldProductSummary implements ISoldProductSummary {
         this.purchaseDate = purchaseDate;
     }
 
-    @Override
     public String getProductName() {
         return productName;
     }
 
-    @Override
     public double getTotalPrice() {
         return totalPrice;
     }
 
-    @Override
     public int getProductId() {
         return productId;
     }
 
-    @Override
     public int getSoldAmount() {
         return quantity;
     }
 
-    @Override
     public Date getPurchaseDate() {
         return purchaseDate;
     }

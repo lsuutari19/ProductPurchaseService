@@ -10,7 +10,6 @@ public class PurchaseService implements IPurchaseService {
     private final Map<Integer, IProduct> products = new HashMap<>();
     private final List<IProduct> purchasedProducts = new ArrayList<>();
 
-    @Override
     public void addNewProduct(int productId, double price, String name) {
         if (price < 0) {
             throw new IllegalArgumentException("ERROR ⚠: Price can't be set to negative number!");
@@ -45,7 +44,6 @@ public class PurchaseService implements IPurchaseService {
         return product;
     }
 
-    @Override
     public void removeProduct(int productId) {
         IProduct removedProduct = products.remove(productId);
         if (removedProduct != null) {
@@ -55,12 +53,10 @@ public class PurchaseService implements IPurchaseService {
         }
     }
 
-    @Override
     public Map<Integer, IProduct> getAvailableProducts() {
         return products;
     }
 
-    @Override
     public void purchaseProduct(IProduct product) {
         long currentTime = System.currentTimeMillis();
         Date toDate = new Date(currentTime);
@@ -75,7 +71,6 @@ public class PurchaseService implements IPurchaseService {
         System.out.println("Added product to purchased products: " + product);
     }
 
-    @Override
     public ISalesReport getSalesReport(Date fromDate, Date toDate) {
         return new SalesReport(fromDate, toDate, purchasedProducts);
     }

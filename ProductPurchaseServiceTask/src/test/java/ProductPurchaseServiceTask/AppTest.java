@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -223,10 +225,11 @@ public class AppTest {
 
     @Test
     public void testSalesReport_HistoryZero() {
-        long currentTime = System.currentTimeMillis();
-        long oneDayAgo = currentTime - 24 * 60 * 60 * 1000;
-        Date fromDate = new Date(0);
-        Date toDate = new Date(oneDayAgo);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneDayAgo = now.minusDays(1);
+
+        Date fromDate = Date.from(oneDayAgo.atZone(ZoneId.systemDefault()).toInstant());
+        Date toDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
         purchaseService.addNewProduct(1, 5.00, "MOVIE TICKET");
         purchaseService.purchaseProduct(new Product(1, 5.00, "MOVIE TICKET"));

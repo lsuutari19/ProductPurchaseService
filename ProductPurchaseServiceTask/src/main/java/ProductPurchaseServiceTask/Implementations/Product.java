@@ -31,17 +31,14 @@ public class Product implements IProduct {
 
     }
 
-    @Override
     public double getPrice() {
         return price;
     }
 
-    @Override
     public int getProductId() {
         return productId;
     }
 
-    @Override
     public String getName() {
         return name;
     }
@@ -55,7 +52,6 @@ public class Product implements IProduct {
     }
 
     // Get a string representation of the product details for human readability instead of the memory reference
-    @Override
     public String toString() {
         return String.format(
                 "Product ID: %-5d | Price: %-10.2f | Name: %s",

@@ -7,6 +7,8 @@ import ProductPurchaseServiceTask.Interfaces.ISalesReport;
 import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 public class Utils {
@@ -37,6 +39,7 @@ public class Utils {
     }
 
     public static void displaySalesReport(ISalesReport salesReport, Date fromDate, Date toDate) {
+        // Display sales report in human readable format
         if (salesReport != null) {
             System.out.println("Sales Report from: " + salesReport.getFromDate());
             System.out.println("Sales Report to: " + salesReport.getToDate());
@@ -47,6 +50,9 @@ public class Utils {
     public static void cliDemo(IPurchaseService purchaseService) {
         Scanner sc = new Scanner(System.in);
         String choice = "";
+
+        initData(purchaseService);
+
         while (!Objects.equals(choice, "q")) {
             System.out.println("\nPlease choose an option:");
             System.out.println("  1. Add new product");
@@ -117,11 +123,11 @@ public class Utils {
                     break;
 
                 case "5":
-                    long currentTime = System.currentTimeMillis();
-                    long oneDayAgo = currentTime - 24 * 60 * 60 * 1000;
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime oneDayAgo = now.minusDays(1);
 
-                    Date fromDate = new Date(oneDayAgo);
-                    Date toDate = new Date(currentTime);
+                    Date fromDate = Date.from(oneDayAgo.atZone(ZoneId.systemDefault()).toInstant());
+                    Date toDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
                     ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
 
                     displaySoldProducts(salesReport, fromDate, toDate);
@@ -154,5 +160,26 @@ public class Utils {
                     break;
             }
         }
+    }
+    public static void initData(IPurchaseService purchaseService) {
+        // Initializes data into the runtime memory
+        purchaseService.addNewProduct(1, 5.00, "MOVIE TICKET");
+        purchaseService.addNewProduct(2, 2.00, "SODA");
+        purchaseService.addNewProduct(3, 6.00, "MOVIE TICKET and SODA");
+        purchaseService.addNewProduct(4, 3.00, "POPCORN");
+        purchaseService.addNewProduct(5, 10.00, "DELUXE COMBO");
+
+        IProduct movieTicket = purchaseService.getAvailableProducts().get(1);
+        IProduct soda = purchaseService.getAvailableProducts().get(2);
+        purchaseService.purchaseProduct(movieTicket);
+
+        try {
+            // Sleep just to get a different purchase time for testing purposes
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            System.out.println("Sleep was interrupted: " + e.getMessage());
+        }
+
+        purchaseService.purchaseProduct(soda);
     }
 }
