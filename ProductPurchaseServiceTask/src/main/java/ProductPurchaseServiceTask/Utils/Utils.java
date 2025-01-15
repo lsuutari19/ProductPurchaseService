@@ -25,18 +25,15 @@ public class Utils {
     }
 
     public static void displaySoldProducts(ISalesReport salesReport, Date fromDate, Date toDate) {
-        // Used to iterate the sales data in to human readable format
         System.out.println("\nSold products between " + fromDate + " and " + toDate + ": ");
         for (ISoldProductSummary summary : salesReport.getSoldProducts()) {
-            System.out.println("Product Name: " + summary.getProductName());
             System.out.println("Quantity Sold: " + summary.getSoldAmount());
             System.out.println("Total Sales: " + summary.getTotalPrice());
-            System.out.println("Product ID: " + summary.getProductId());
             System.out.println("Purchase Date: " + summary.getPurchaseDate() + "\n");
         }
     }
 
-    public static void displaySalesReport(ISalesReport salesReport, Date fromDate, Date toDate) {
+    public static void displaySalesReport(ISalesReport salesReport) {
         if (salesReport != null) {
             System.out.println("Sales Report from: " + salesReport.getFromDate());
             System.out.println("Sales Report to: " + salesReport.getToDate());
@@ -136,7 +133,7 @@ public class Utils {
                         Date endDateParsed = dateFormat.parse(endDate);
 
                         ISalesReport specificSalesReport = purchaseService.getSalesReport(startDateParsed, endDateParsed);
-                        Utils.displaySalesReport(specificSalesReport, startDateParsed, endDateParsed);
+                        displaySalesReport(specificSalesReport);
 
                     } catch(Exception e) {
                         System.out.println(e.getMessage());

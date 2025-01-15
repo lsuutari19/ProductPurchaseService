@@ -24,7 +24,6 @@ public class SoldProductSummary implements ISoldProductSummary {
         this.purchaseDate = purchaseDate;
     }
 
-    @Override
     public String getProductName() {
         return productName;
     }
@@ -34,7 +33,6 @@ public class SoldProductSummary implements ISoldProductSummary {
         return totalPrice;
     }
 
-    @Override
     public int getProductId() {
         return productId;
     }

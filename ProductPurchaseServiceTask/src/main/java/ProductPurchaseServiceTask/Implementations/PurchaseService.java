@@ -8,7 +8,7 @@ import java.util.*;
 
 public class PurchaseService implements IPurchaseService {
     private final Map<Integer, IProduct> products = new HashMap<>();
-    private final List<IProduct> purchasedProducts = new ArrayList<>();
+    private final Map<IProduct, Date> purchasedProducts = new HashMap<>();
 
     @Override
     public void addNewProduct(int productId, double price, String name) {
@@ -33,7 +33,7 @@ public class PurchaseService implements IPurchaseService {
         products.put(productId, product);
     }
 
-    public List<IProduct> getPurchasedProducts() {
+    public Map<IProduct, Date> getPurchasedProducts() {
         return purchasedProducts;
     }
 
@@ -62,21 +62,27 @@ public class PurchaseService implements IPurchaseService {
 
     @Override
     public void purchaseProduct(IProduct product) {
-        long currentTime = System.currentTimeMillis();
-        Date toDate = new Date(currentTime);
         if (!products.containsKey(product.getProductId())) {
             throw new IllegalArgumentException("ERROR ⚠: Product not found in available products.");
         }
-        if (product instanceof Product) {
-            System.out.println("Setting purchase date for product: " + product.getName() + " Time: " + toDate);
-            product.setPurchaseDate(toDate);
-        }
-        purchasedProducts.add(product);
-        System.out.println("Added product to purchased products: " + product);
+
+        Date purchaseDate = new Date();
+        purchasedProducts.put(product, purchaseDate);
+
+        System.out.println("Product purchased: " + product.getName() + " at " + purchaseDate);
     }
 
     @Override
     public ISalesReport getSalesReport(Date fromDate, Date toDate) {
-        return new SalesReport(fromDate, toDate, purchasedProducts);
+        Map<IProduct, Date> filteredProductsMap = new HashMap<>();
+
+        for (Map.Entry<IProduct, Date> entry : purchasedProducts.entrySet()) {
+            Date purchaseDate = entry.getValue();
+            if (!purchaseDate.before(fromDate) && !purchaseDate.after(toDate)) {
+                filteredProductsMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return new SalesReport(fromDate, toDate, filteredProductsMap);
     }
 }

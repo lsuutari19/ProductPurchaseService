@@ -10,7 +10,4 @@ public interface IProduct {
 
     String getName();
 
-    void setPurchaseDate(Date date);
-
-    Date getPurchaseDate();
 }

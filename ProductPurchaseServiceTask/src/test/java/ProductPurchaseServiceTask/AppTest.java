@@ -144,7 +144,7 @@ public class AppTest {
         purchaseService.addNewProduct(4, 30.00, "Headphones");
         purchaseService.purchaseProduct(product);
         assertTrue("Purchased products should contain the headphones.",
-                purchaseService.getPurchasedProducts().contains(product));
+                purchaseService.getPurchasedProducts().containsKey(product));
     }
 
     @Test
@@ -250,17 +250,15 @@ public class AppTest {
         int quantity = 2;
         double totalPrice = 10.00;
         int productId = 1;
-
-        Product product = new Product(productId, 5.00, productName);
         Date purchaseDate = new Date();
-        product.setPurchaseDate(purchaseDate);
 
-        SoldProductSummary summary = new SoldProductSummary(productName, quantity, totalPrice, productId, product.getPurchaseDate());
+        SoldProductSummary summary = new SoldProductSummary(productName, quantity, totalPrice, productId, purchaseDate);
 
-        assertEquals("Product name should be correct", summary.getProductName(), "MOVIE TICKET");
-        assertEquals("Total price should be correct", totalPrice, summary.getTotalPrice(), 0);
-        assertEquals("Product ID should be correct", String.valueOf(productId), String.valueOf(summary.getProductId()));
-        assertEquals("Quantity sold should be correct", String.valueOf(quantity), String.valueOf(summary.getSoldAmount()));
+        assertEquals("Product name should be correct", "MOVIE TICKET", summary.getProductName());
+        assertEquals("Total price should be correct", 10.00, summary.getTotalPrice(), 0);
+        assertEquals("Product ID should be correct", 1, summary.getProductId());
+        assertEquals("Quantity sold should be correct", 2, summary.getSoldAmount());
+        assertEquals("Purchase date should be correct", purchaseDate, summary.getPurchaseDate());
     }
 
     @Test
@@ -269,17 +267,15 @@ public class AppTest {
         int quantity = 0;
         double totalPrice = 0.00;
         int productId = 3;
-
-        Product product = new Product(productId, 5.00, productName);
         Date purchaseDate = new Date();
-        product.setPurchaseDate(purchaseDate);
 
-        SoldProductSummary summary = new SoldProductSummary(productName, quantity, totalPrice, productId, product.getPurchaseDate());
+        SoldProductSummary summary = new SoldProductSummary(productName, quantity, totalPrice, productId, purchaseDate);
 
-        assertEquals("Product name should be correct", productName, summary.getProductName());
-        assertEquals("Total price should be 0.00 for zero quantity", totalPrice, summary.getTotalPrice(), 0);
-        assertEquals("Product ID should be correct", String.valueOf(productId), String.valueOf(summary.getProductId()));
-        assertEquals("Sold amount should be 0 for no sales", String.valueOf(quantity), String.valueOf(summary.getSoldAmount()));
+        assertEquals("Product name should be correct", "SODA", summary.getProductName());
+        assertEquals("Total price should be 0.00", 0.00, summary.getTotalPrice(), 0);
+        assertEquals("Product ID should be correct", 3, summary.getProductId());
+        assertEquals("Sold amount should be 0", 0, summary.getSoldAmount());
+        assertEquals("Purchase date should be correct", purchaseDate, summary.getPurchaseDate());
     }
 
     @Test
@@ -288,13 +284,10 @@ public class AppTest {
         int quantity = 3;
         double totalPrice = -6.00;
         int productId = 2;
-
-        Product product = new Product(productId, 5.00, productName);
         Date purchaseDate = new Date();
-        product.setPurchaseDate(purchaseDate);
 
         try {
-            new SoldProductSummary(productName, quantity, totalPrice, productId, product.getPurchaseDate());
+            new SoldProductSummary(productName, quantity, totalPrice, productId, purchaseDate);
             fail("Expected IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException e) {
             assertEquals("ERROR ⚠: Price and quantity must be non-negative.", e.getMessage());

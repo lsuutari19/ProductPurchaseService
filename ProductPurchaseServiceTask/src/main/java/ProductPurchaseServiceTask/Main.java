@@ -8,6 +8,7 @@ import ProductPurchaseServiceTask.Utils.Utils;
 
 
 import java.util.Date;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,9 +40,11 @@ public class Main {
         Utils.displayAvailableProducts(purchaseService.getAvailableProducts());
 
         System.out.println("\nVerifying purchased products and their purchase dates...");
-        for (IProduct purchasedProduct : ((PurchaseService) purchaseService).getPurchasedProducts()) {
+        for (Map.Entry<IProduct, Date> entry : ((PurchaseService) purchaseService).getPurchasedProducts().entrySet()) {
+            IProduct purchasedProduct = entry.getKey();
+            Date purchaseDate = entry.getValue();
             System.out.println("Product Name: " + purchasedProduct.getName());
-            System.out.println("Purchase Date: " + purchasedProduct.getPurchaseDate());
+            System.out.println("Purchase Date: " + purchaseDate);
         }
 
         long currentTime = System.currentTimeMillis();
@@ -52,7 +55,7 @@ public class Main {
         ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
 
         //Utils.displaySoldProducts(salesReport, fromDate, toDate);
-        Utils.displaySalesReport(salesReport, fromDate, toDate);
+        Utils.displaySalesReport(salesReport);
 
         System.out.println("\nRemoving product with productId 5...");
         purchaseService.removeProduct(5);

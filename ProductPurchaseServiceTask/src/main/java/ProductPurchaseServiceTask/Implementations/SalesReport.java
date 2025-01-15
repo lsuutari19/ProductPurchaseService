@@ -4,21 +4,18 @@ import ProductPurchaseServiceTask.Interfaces.IProduct;
 import ProductPurchaseServiceTask.Interfaces.ISalesReport;
 import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SalesReport implements ISalesReport {
     private final Date fromDate;
     private final Date toDate;
-    private final List<IProduct> soldProducts;
+    private final Map<IProduct, Date> purchasedProducts;
 
-    public SalesReport(Date fromDate, Date toDate, List<IProduct> soldProducts) {
+    public SalesReport(Date fromDate, Date toDate, Map<IProduct, Date> purchasedProducts) {
         this.fromDate = fromDate;
         this.toDate = toDate;
-        this.soldProducts = soldProducts;
+        this.purchasedProducts = purchasedProducts;
     }
 
     @Override
@@ -33,25 +30,27 @@ public class SalesReport implements ISalesReport {
 
     @Override
     public double getTotalSales() {
-        return soldProducts.stream().mapToDouble(IProduct::getPrice).sum();
+        return purchasedProducts.entrySet().stream()
+                .filter(entry -> isWithinDateRange(entry.getValue()))
+                .mapToDouble(entry -> entry.getKey().getPrice())
+                .sum();
     }
-
 
     @Override
     public List<ISoldProductSummary> getSoldProducts() {
-        if (soldProducts.isEmpty()) {
+        if (purchasedProducts.isEmpty()) {
             return new ArrayList<>();
         }
 
-        List<IProduct> filteredProducts = soldProducts.stream()
-                .filter(product -> !product.getPurchaseDate().before(fromDate) && !product.getPurchaseDate().after(toDate))
-                .collect(Collectors.toList());
+        Map<IProduct, Date> filteredProducts = purchasedProducts.entrySet().stream()
+                .filter(entry -> isWithinDateRange(entry.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         if (filteredProducts.isEmpty()) {
             return new ArrayList<>();
         }
 
-        Map<Integer, Long> productCounts = filteredProducts.stream()
+        Map<Integer, Long> productCounts = filteredProducts.keySet().stream()
                 .collect(Collectors.groupingBy(IProduct::getProductId, Collectors.counting()));
 
         List<ISoldProductSummary> summaryList = productCounts.entrySet().stream()
@@ -59,21 +58,32 @@ public class SalesReport implements ISalesReport {
                     int productId = entry.getKey();
                     long quantity = entry.getValue();
 
-                    IProduct product = filteredProducts.stream()
+                    IProduct product = filteredProducts.keySet().stream()
                             .filter(p -> p.getProductId() == productId)
                             .findFirst()
                             .orElseThrow(() -> new IllegalStateException("Product not found with ID: " + productId));
 
+                    double totalSales = product.getPrice() * quantity;
+                    Date latestPurchaseDate = filteredProducts.entrySet().stream()
+                            .filter(e -> e.getKey().getProductId() == productId)
+                            .map(Map.Entry::getValue)
+                            .max(Date::compareTo)
+                            .orElse(null);
+
                     return new SoldProductSummary(
                             product.getName(),
                             (int) quantity,
-                            product.getPrice() * quantity,
+                            totalSales,
                             product.getProductId(),
-                            product.getPurchaseDate()
+                            latestPurchaseDate
                     );
                 })
                 .collect(Collectors.toList());
 
         return summaryList;
+    }
+
+    private boolean isWithinDateRange(Date date) {
+        return !date.before(fromDate) && !date.after(toDate);
     }
 }
