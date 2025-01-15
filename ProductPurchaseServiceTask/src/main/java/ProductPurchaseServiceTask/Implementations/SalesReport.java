@@ -21,23 +21,18 @@ public class SalesReport implements ISalesReport {
         this.soldProducts = soldProducts;
     }
 
-    @Override
     public Date getFromDate() {
         return this.fromDate;
     }
 
-    @Override
     public Date getToDate() {
         return this.toDate;
     }
 
-    @Override
     public double getTotalSales() {
         return soldProducts.stream().mapToDouble(IProduct::getPrice).sum();
     }
 
-
-    @Override
     public List<ISoldProductSummary> getSoldProducts() {
         if (soldProducts.isEmpty()) {
             return new ArrayList<>();
