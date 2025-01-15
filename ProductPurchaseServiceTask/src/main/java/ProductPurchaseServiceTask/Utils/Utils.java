@@ -118,10 +118,13 @@ public class Utils {
 
                 case "5":
                     long currentTime = System.currentTimeMillis();
-                    Date fromDate = new Date();
+                    long oneDayAgo = currentTime - 24 * 60 * 60 * 1000;
+
+                    Date fromDate = new Date(oneDayAgo);
                     Date toDate = new Date(currentTime);
                     ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
-                    Utils.displaySoldProducts(salesReport, fromDate, toDate);
+
+                    displaySoldProducts(salesReport, fromDate, toDate);
                     break;
 
                 case "6":

@@ -51,7 +51,7 @@ public class Main {
         Date toDate = new Date(currentTime);
         ISalesReport salesReport = purchaseService.getSalesReport(fromDate, toDate);
 
-        //Utils.displaySoldProducts(salesReport, fromDate, toDate);
+        Utils.displaySoldProducts(salesReport, fromDate, toDate);
         Utils.displaySalesReport(salesReport, fromDate, toDate);
 
         System.out.println("\nRemoving product with productId 5...");
