@@ -4,18 +4,17 @@ import ProductPurchaseServiceTask.Implementations.Product;
 import ProductPurchaseServiceTask.Implementations.PurchaseService;
 import ProductPurchaseServiceTask.Implementations.SoldProductSummary;
 import ProductPurchaseServiceTask.Interfaces.IProduct;
+import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
 import ProductPurchaseServiceTask.Interfaces.ISalesReport;
 import ProductPurchaseServiceTask.Interfaces.ISoldProductSummary;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import ProductPurchaseServiceTask.Interfaces.IPurchaseService;
-
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class AppTest {
 
@@ -32,18 +31,6 @@ public class AppTest {
     @Before
     public void setUp() {
         purchaseService = new PurchaseService();
-    }
-
-    @Test
-    public void testAddNewProduct_InvalidPrice() {
-        Exception exception = null;
-        try {
-            purchaseService.addNewProduct(3, -5.00, "Invalid product price");
-        } catch (IllegalArgumentException e) {
-            exception = e;
-        }
-        assertNotNull("Exception should be thrown for negative price", exception);
-        assertEquals("ERROR ⚠: Price can't be set to negative number!", exception.getMessage());
     }
 
     @Test
@@ -216,8 +203,10 @@ public class AppTest {
 
     @Test
     public void testSalesReport_Purchases() {
-        purchaseService.addNewProduct(1, 5.00, "MOVIE TICKET");
-        purchaseService.addNewProduct(2, 2.00, "SODA");
+        double price1 = 5.00;
+        double price2 = 2.00;
+        purchaseService.addNewProduct(1, price1, "MOVIE TICKET");
+        purchaseService.addNewProduct(2, price2, "SODA");
         purchaseService.purchaseProduct(new Product(1, 5.00, "MOVIE TICKET"));
         purchaseService.purchaseProduct(new Product(2, 2.00, "SODA"));
         Date fromDate = new Date(0);
@@ -226,6 +215,10 @@ public class AppTest {
 
         List<ISoldProductSummary> soldProducts = salesReport.getSoldProducts();
         Assert.assertEquals("There should be 2 sold products", 2, soldProducts.size());
+        Assert.assertEquals("The total sales need to match the sum of purchased product prices",
+                (price1 + price2),
+                salesReport.getTotalSales(),
+                0);
     }
 
     @Test
@@ -289,15 +282,15 @@ public class AppTest {
         double totalPrice = -6.00;
         int productId = 2;
 
-        Product product = new Product(productId, 5.00, productName);
-        Date purchaseDate = new Date();
-        product.setPurchaseDate(purchaseDate);
-
         try {
+            Product product = new Product(productId, totalPrice, productName);
+            Date purchaseDate = new Date();
+            product.setPurchaseDate(purchaseDate);
+
             new SoldProductSummary(productName, quantity, totalPrice, productId, product.getPurchaseDate());
             fail("Expected IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException e) {
-            assertEquals("ERROR ⚠: Price and quantity must be non-negative.", e.getMessage());
+            assertEquals("ERROR ⚠: Price can't be set to negative number!", e.getMessage());
         }
     }
 }

@@ -19,6 +19,9 @@ public interface ISalesReport {
      */
     Date getToDate();
 
+    /**
+     * Returns total sales of this sales report
+     */
     double getTotalSales();
 
     /**

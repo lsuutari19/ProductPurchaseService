@@ -141,11 +141,10 @@ public class Utils {
                         ISalesReport specificSalesReport = purchaseService.getSalesReport(startDateParsed, endDateParsed);
                         Utils.displaySalesReport(specificSalesReport, startDateParsed, endDateParsed);
 
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-
                 case "q":
                     System.out.println("Exiting program...");
                     break;
